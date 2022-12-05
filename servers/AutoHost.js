@@ -100,11 +100,23 @@ client.connect().then(async () => {
 			}
 			channel.sendMessage(`Host Queue: ${strArray.join(", ")}`);
 		} else if (command === "rule" || command === "rules") {
-			channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: Standard | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
+			// get mode 0 = osu!standard 1 = taiko 2 = ctb 3 = mania
+			let mode = ""
+			if (Rotator.mode == 0) {
+				mode = "Standard";
+			} else if (Rotator.mode == 1) {
+				mode = "Taiko";
+			} else if (Rotator.mode == 2) {
+				mode = "Catch the Beat";
+			} else if (Rotator.mode == 3) {
+				mode = "Mania";
+			}
+
+			channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: ${mode} | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
 		} else if (command === "info") {
-			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: Source Code: [https://github.com/Adivise/SpaceTime SpaceTime]`);
+			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceTime SpaceTime]`);
 		} else if (command === "help") {
-			channel.sendMessage(`*Commands* | !start <time> (Start Match) | !stop (Abort Time) | !abort | !skip (Skip host!) | !queue | !rule | !info`);
+			channel.sendMessage(`*Commands* | [https://github.com/Adivise/SpaceTime#-auto-host-mode Commands]`);
 		}
 	});
 

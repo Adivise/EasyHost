@@ -113,11 +113,22 @@ client.connect().then(async () => {
 				await getBeatmap();
 			}
 		} else if (command === "rule" || command === "rules") {
-			channel.sendMessage(`*Rules* | Star Rating: ${AutoTeam.min_star}* - ${AutoTeam.max_star}* | Mode: Standard | Mods: ${AutoTeam.mods.join(", ")} | FreeMod: ${AutoTeam.freemod ? "Allowed" : "Not Allowed"}`);
+			let mode = ""
+			if (Rotator.mode == 0) {
+				mode = "Standard";
+			} else if (Rotator.mode == 1) {
+				mode = "Taiko";
+			} else if (Rotator.mode == 2) {
+				mode = "Catch the Beat";
+			} else if (Rotator.mode == 3) {
+				mode = "Mania";
+			}
+
+			channel.sendMessage(`*Rules* | Star Rating: ${AutoTeam.min_star}* - ${AutoTeam.max_star}* | Mode: ${mode} | Mods: ${AutoTeam.mods.join(", ")} | FreeMod: ${AutoTeam.freemod ? "Allowed" : "Not Allowed"}`);
 		} else if (command === "info") {
 			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceTime SpaceTime]`);
 		} else if (command === "help") {
-			channel.sendMessage(`*Commands* | !start <time> (Start) | !stop (Abort Time) | !abort (Abort) | !skip (Skip beatmap!) | !rule | !info`);
+			channel.sendMessage(`*Commands* | [https://github.com/Adivise/SpaceTime#-auto-team-mode Commands]`);
 		}
 	});
 
