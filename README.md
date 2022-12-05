@@ -70,7 +70,7 @@ Lobby Configuration in `settings/lobby.json` (Example):
 }
 ```
 
-After installation or finishes all you can use `npm run **rotate**, **map**, **versus**` to start the bot. (`Can run multiple bots at the same time`)
+After installation or finishes all you can use `npm run rotate, map, versus` to start the bot. (`Can run multiple bots at the same time`)
 
 </p>
 </details>
