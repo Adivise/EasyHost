@@ -10,6 +10,9 @@
   <a href="https://ko-fi.com/nanotect" target="_blank"> <img src="https://ko-fi.com/img/githubbutton_sm.svg"/> </a> 
 </p>
 
+## 🚨 Warning
+- this bot is still in development (not fully test), so there will be bugs and errors. If you find any, please report them in the [issues](https://github.com/Adivise/SpaceTime/issues)
+
 ## 📑 Feature
 - [x] 3 in 1 (Rotate, Map, and Team)
 - [x] No Database Required
