@@ -70,7 +70,7 @@ Lobby Configuration in `settings/lobby.json` (Example):
 }
 ```
 
-After installation or finishes all you can use `Run AutHost.bat, Run AutoMap.bat, and Run AutoTeam.bat` to start the bot. (`Can run multiple bots at the same time`)
+After installation or finishes all you can use `AutHost.bat, AutoMap.bat, and AutoTeam.bat` to start the bot. (`Can run multiple windown at the same time`)
 
 </p>
 </details>
