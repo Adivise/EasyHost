@@ -1,7 +1,7 @@
 {
-  "name": "space-rotate",
+  "name": "spacetime",
   "version": "1.0.1",
-  "description": "osu bot auto host rotate",
+  "description": "osu bot auto rotate, auto map, auto team",
   "main": "./servers/AutoHost.js",
   "scripts": {
     "rotate": "node ./servers/AutoHost.js",
@@ -15,5 +15,13 @@
     "nodesu": "^0.7.3"
   },
   "author": "Adivise",
-  "license": "ISC"
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Adivise/SpaceTime.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Adivise/SpaceTime/issues"
+  },
+  "homepage": "https://github.com/Adivise/SpaceTime/#readme"
 }
