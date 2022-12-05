@@ -103,7 +103,7 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 - Info (!info) - Show Bot Info
 - Help (!help) - Show Command List
 
-🎶 **Auto Team Mode** 
+💬 **Auto Team Mode** 
 
 - Start (!start) - Start Match (Vote)
 - Stop (!stop) - Stop Abort Timer (Vote)
