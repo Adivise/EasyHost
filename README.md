@@ -36,7 +36,7 @@ npm install
 
 ## 📄 Configuration
 
-Copy or Rename in setttings/`config.json.example` to `config.json` and fill out the values:
+Copy or Rename in `setttings/config.json.example` to `config.json` and fill out the values:
 
 ```.json
 {
@@ -48,7 +48,7 @@ Copy or Rename in setttings/`config.json.example` to `config.json` and fill out 
 }
 ```
 
-Lobby Configuration (Example):
+Lobby Configuration in `settings/lobby.json` (Example):
 
 ```.json
 {

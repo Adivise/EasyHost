@@ -1,0 +1,19 @@
+{
+  "name": "space-rotate",
+  "version": "1.0.1",
+  "description": "osu bot auto host rotate",
+  "main": "./servers/AutoHost.js",
+  "scripts": {
+    "rotate": "node ./servers/AutoHost.js",
+    "map": "node ./servers/AutoMap.js",
+    "versus": "node ./servers/AutoVersus.js"
+  },
+  "dependencies": {
+    "bancho.js": "^0.11.0",
+    "dotenv": "^16.0.3",
+    "node-fetch": "^2.6.0",
+    "nodesu": "^0.7.3"
+  },
+  "author": "Adivise",
+  "license": "ISC"
+}

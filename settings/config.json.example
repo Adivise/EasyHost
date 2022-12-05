@@ -1,0 +1,7 @@
+{
+    "ipc": {
+        "username": "YOUR_OSU_NAME",
+        "password": "YOUR_IRC_PASSWORD",
+        "apiKey": "YOUR_APIKEY"
+    }
+}

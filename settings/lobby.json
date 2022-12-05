@@ -1,0 +1,43 @@
+{
+    "Rotator": {
+        "name": "Auto Rotate | 5* - 8.99* | 15:00 | !info",
+        "password": "",
+        "mode": 0,
+        "win_condition": 0,
+        "team_mode": 0,
+        "size": 16,
+        "freemod": true,
+        "mods": ["None"],
+        "min_star": 5,
+        "max_star": 8.99,
+        "min_length": 30,
+        "max_length": 900,
+        "since": ["2022-01-01", "2021-01-01", "2020-01-01", "2019-01-01", "2018-01-01", "2017-01-01"]
+    },
+    "AutoMap": {
+        "name": "Auto Map | 4.99* - 6.99* | !info",
+        "password": "",
+        "mode": 0,
+        "win_condition": 0,
+        "team_mode": 0,
+        "size": 16,
+        "freemod": true,
+        "mods": ["None"],
+        "min_star": 4.99,
+        "max_star": 6.99,
+        "since": ["2022-01-01", "2021-01-01", "2020-01-01", "2019-01-01", "2018-01-01", "2017-01-01"]
+    },
+    "AutoTeam": {
+        "name": "Auto Team 4v4 | 4.99* - 6.99* | !info",
+        "password": "",
+        "mode": 0,
+        "win_condition": 3,
+        "team_mode": 2,
+        "size": 8,
+        "freemod": true,
+        "mods": ["None"],
+        "min_star": 4.99,
+        "max_star": 6.99,
+        "since": ["2022-01-01", "2021-01-01", "2020-01-01", "2019-01-01", "2018-01-01", "2017-01-01"]
+    }
+}
