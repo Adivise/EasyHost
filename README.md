@@ -82,7 +82,7 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 
 > Note: The default prefix is '!'
 
-💬 **Auto Host Mode**
+### 💬 **Auto Host Mode**
 
 - Start (!start or !start [seconds]) - Start Match (Host)
 - Stop (!stop) - Stop Abort Timer (Host)
@@ -93,7 +93,7 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 - Info (!info) - Show Bot Info
 - Help (!help) - Show Command List 
 
-💬 **Auto Map Mode**
+### 💬 **Auto Map Mode**
 
 - Start (!start) - Start Match (Vote)
 - Stop (!stop) - Stop Abort Timer (Vote)
@@ -103,7 +103,7 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 - Info (!info) - Show Bot Info
 - Help (!help) - Show Command List
 
-💬 **Auto Team Mode** 
+### 💬 **Auto Team Mode** 
 
 - Start (!start) - Start Match (Vote)
 - Stop (!stop) - Stop Abort Timer (Vote)
