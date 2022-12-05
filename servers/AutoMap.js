@@ -14,6 +14,7 @@ let lobby;
 
 // Memory database console died = no more database
 let queue = []; // player list
+
 let skip = []; // skip list
 let start = []; // start list
 let abort = []; // abort list
@@ -134,12 +135,7 @@ client.connect().then(async () => {
 
 	lobby.on("matchFinished", async () => {
 		await getBeatmap();
-
-		// clear votes
-		start = [];
-		skip = [];
-		stop = [];
-		abort = [];
+		await clearVotes();
 	});
 
 	lobby.on("allPlayersReady", async () => {
@@ -171,4 +167,11 @@ async function getMods() {
 	let random = mods[Math.floor(Math.random() * mods.length)];
 	
 	lobby.channel.sendMessage(`!mp mods ${random}`);
+}
+
+async function clearVotes() {
+	start = [];
+	skip = [];
+	stop = [];
+	abort = [];
 }

@@ -14,6 +14,7 @@ let lobby;
 
 // Memory database console died = no more database
 let queue = []; // player list
+
 let skip = []; // skip list
 let start = []; // start list
 let abort = []; // abort list
