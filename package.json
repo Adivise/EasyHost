@@ -1,5 +1,5 @@
 {
-  "name": "spacetime",
+  "name": "spacehost",
   "version": "1.0.1",
   "description": "osu bot auto rotate, auto map, auto team",
   "main": "./servers/AutoHost.js",
@@ -18,10 +18,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Adivise/SpaceTime.git"
+    "url": "git+https://github.com/Adivise/SpaceHost.git"
   },
   "bugs": {
-    "url": "https://github.com/Adivise/SpaceTime/issues"
+    "url": "https://github.com/Adivise/SpaceHost/issues"
   },
-  "homepage": "https://github.com/Adivise/SpaceTime/#readme"
+  "homepage": "https://github.com/Adivise/SpaceHost/#readme"
 }

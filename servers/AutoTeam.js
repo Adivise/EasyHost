@@ -49,7 +49,7 @@ client.connect().then(async () => {
 		if (beatmap.length == 0) return await getBeatmap();
 		if (beatmap[0].mode != AutoTeam.mode) return await getBeatmap();
 
-		channel.sendMessage(`*Details* | [https://osu.ppy.sh//beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${parseInt(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
+		channel.sendMessage(`*Details* | [https://osu.ppy.sh/beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${parseInt(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
 		channel.sendMessage(`*Mirror* | [https://beatconnect.io/b/${beatmap[0].beatmapset_id} BeatConnect] | [https://dl.sayobot.cn/beatmaps/download/novideo/${beatmap[0].beatmapset_id} Sayobot] | [https://api.chimu.moe/v1/download/${beatmap[0].beatmapset_id}?n=1 Chimu]`);
 
 	});
@@ -126,9 +126,9 @@ client.connect().then(async () => {
 
 			channel.sendMessage(`*Rules* | Star Rating: ${AutoTeam.min_star}* - ${AutoTeam.max_star}* | Mode: ${mode} | Mods: ${AutoTeam.mods.join(", ")} | FreeMod: ${AutoTeam.freemod ? "Allowed" : "Not Allowed"}`);
 		} else if (command === "info") {
-			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceTime SpaceTime]`);
+			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost]`);
 		} else if (command === "help") {
-			channel.sendMessage(`*Commands* | [https://github.com/Adivise/SpaceTime#-auto-team-mode Commands]`);
+			channel.sendMessage(`*Commands* | [https://github.com/Adivise/SpaceHost#-auto-team-mode Commands]`);
 		}
 	});
 

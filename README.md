@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=SpaceTime&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient"/> </a> 
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=SpaceHost&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient"/> </a> 
 </p>
 
 <p align="center"> 
@@ -11,7 +11,7 @@
 </p>
 
 ## 🚨 Warning
-- this bot is still in development (not fully test), so there will be bugs and errors. If you find any, please report them in the [issues](https://github.com/Adivise/SpaceTime/issues)
+- this bot is still in development (not fully test), so there will be bugs and errors. If you find any, please report them in the [issues](https://github.com/Adivise/SpaceHost/issues)
 
 ## 📑 Feature
 - [x] 3 in 1 (Rotate, Map, and Team)
@@ -29,8 +29,8 @@
 ## 📚 Installation
 
 ```
-git clone https://github.com/Adivise/SpaceTime
-cd SpaceTime
+git clone https://github.com/Adivise/SpaceHost
+cd SpaceHost
 npm install
 ```
 
@@ -121,6 +121,6 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 
 ## ❣ Contributors
 
-<a href="https://github.com/Adivise/SpaceTime/graphs/contributors">
-  <img src="https://contributors-img.web.app/image?repo=Adivise/SpaceTime" />
+<a href="https://github.com/Adivise/SpaceHost/graphs/contributors">
+  <img src="https://contributors-img.web.app/image?repo=Adivise/SpaceHost" />
 </a>
