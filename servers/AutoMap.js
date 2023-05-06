@@ -21,7 +21,10 @@ let abort = []; // abort list
 let stop = []; // stop list
 
 client.connect().then(async () => {
-	console.log(`[INFO] Bot is online!`);
+	console.log(`[INFO] Bot ${ipc.username} is online!`);
+	console.log(`[TIP] You can use *CRTL + C* to close the lobby!`);
+	console.log(`[WARN] Don't try exit with click out, the lobby will not close fully`);
+	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close and chat`);
 
 	const channel = await client.createLobby("Setting up lobby...");
 	lobby = channel.lobby;
@@ -46,7 +49,7 @@ client.connect().then(async () => {
 		if (beatmap.length == 0) return await getBeatmap();
 		if (beatmap[0].mode != AutoMap.mode) return await getBeatmap();
 
-		channel.sendMessage(`*Details* | [https://osu.ppy.sh/beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${parseInt(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
+		channel.sendMessage(`*Details* | [https://osu.ppy.sh/beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${Number(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
 		channel.sendMessage(`*Mirror* | [https://beatconnect.io/b/${beatmap[0].beatmapset_id} BeatConnect] | [https://dl.sayobot.cn/beatmaps/download/novideo/${beatmap[0].beatmapset_id} Sayobot] | [https://api.chimu.moe/v1/download/${beatmap[0].beatmapset_id}?n=1 Chimu]`);
 
 	});
@@ -68,8 +71,8 @@ client.connect().then(async () => {
 			if (start.includes(message.user.id)) return channel.sendMessage("You already voted to start the game!");
 			start.push(message.user.id);
 
-			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to start the game! - (${start.length}/${queue.length / 2})`);
-			if (start.length >= queue.length / 2) {
+			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to start the game! - (${start.length}/${Math.ceil(queue.length / 2)})`);
+			if (start.length >= Math.ceil(queue.length / 2)) {
 				start = [];
 
 				channel.sendMessage("!mp start");
@@ -80,8 +83,8 @@ client.connect().then(async () => {
 			if (stop.includes(message.user.id)) return channel.sendMessage("You already voted to abort timer!");
 			stop.push(message.user.id);
 
-			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to abort timer! - (${stop.length}/${queue.length / 2})`);
-			if (stop.length >= queue.length / 2) {
+			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to abort timer! - (${stop.length}/${Math.ceil(queue.length / 2)})`);
+			if (stop.length >= Math.ceil(queue.length / 2)) {
 				stop = [];
 
 				channel.sendMessage("!mp aborttimer");
@@ -92,8 +95,8 @@ client.connect().then(async () => {
 			if (abort.includes(message.user.id)) return channel.sendMessage("You already voted to abort the game!");
 			abort.push(message.user.id);
 
-			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to abort the game! - (${abort.length}/${queue.length / 2})`);
-			if (abort.length >= queue.length / 2) {
+			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to abort the game! - (${abort.length}/${Math.ceil(queue.length / 2)})`);
+			if (abort.length >= Math.ceil(queue.length / 2)) {
 				abort = [];
 
 				channel.sendMessage("!mp abort");
@@ -104,8 +107,8 @@ client.connect().then(async () => {
 			if (skip.includes(message.user.id)) return channel.sendMessage("You already voted to skip the beatmap!");
 			skip.push(message.user.id);
 
-			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to skip beatmap! - (${skip.length}/${queue.length / 2})`);
-			if (skip.length >= queue.length / 2) {
+			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to skip beatmap! - (${skip.length}/${Math.ceil(queue.length / 2)})`);
+			if (skip.length >= Math.ceil(queue.length / 2)) {
 				skip = [];
 				await getBeatmap();
 			}
@@ -123,9 +126,7 @@ client.connect().then(async () => {
 
 			channel.sendMessage(`*Rules* | Star Rating: ${AutoMap.min_star}* - ${AutoMap.max_star}* | Mode: ${mode} | Mods: ${AutoMap.mods.join(", ")} | FreeMod: ${AutoMap.freemod ? "Allowed" : "Not Allowed"}`);
 		} else if (command === "info") {
-			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost]`);
-		} else if (command === "help") {
-			channel.sendMessage(`*Commands* | [https://github.com/Adivise/SpaceHost#-auto-map-mode Commands]`);
+			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost] | [https://github.com/Adivise/SpaceHost#-features--commands Commands]`);
 		}
 	});
 

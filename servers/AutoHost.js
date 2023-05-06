@@ -16,9 +16,13 @@ let lobby;
 let queue = [];
 let host = 0;
 let vote = [];
+let warning = 0;
 
 client.connect().then(async () => {
-	console.log(`[INFO] Bot is online!`);
+	console.log(`[INFO] Bot ${ipc.username} is online!`);
+	console.log(`[TIP] You can use *CRTL + C* to close the lobby!`);
+	console.log(`[WARN] Don't try exit with click out, the lobby will not close fully`);
+	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close and chat`);
 
 	const channel = await client.createLobby("Setting up lobby...");
 	lobby = channel.lobby;
@@ -42,7 +46,7 @@ client.connect().then(async () => {
 
 		await checkRules(beatmap);
 
-		channel.sendMessage(`*Details* | [https://osu.ppy.sh/beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${parseInt(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
+		channel.sendMessage(`*Details* | [https://osu.ppy.sh/beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${Number(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
 		channel.sendMessage(`*Mirror* | [https://beatconnect.io/b/${beatmap[0].beatmapset_id} BeatConnect] | [https://dl.sayobot.cn/beatmaps/download/novideo/${beatmap[0].beatmapset_id} Sayobot] | [https://api.chimu.moe/v1/download/${beatmap[0].beatmapset_id}?n=1 Chimu]`);
 
 	});
@@ -83,10 +87,10 @@ client.connect().then(async () => {
 			if (vote.includes(message.user.id)) return channel.sendMessage("You already voted!");
 			vote.push(message.user.id);
 
-			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to skip! - (${vote.length}/${queue.length / 2})`);
+			channel.sendMessage(`[https://osu.ppy.sh/users/${message.user.id} ${message.user.username}] Voted to skip host! - (${vote.length}/${Math.ceil(queue.length / 2)})`);
 
-			if (vote.length >= queue.length / 2) {
-				lobby.channel.sendMessage("Skip Vote Passed!");
+			if (vote.length >= Math.ceil(queue.length / 2)) {
+				lobby.channel.sendMessage("Host are skipped!");
 				// remove vote
 				vote = [];
 				// host to next player
@@ -114,9 +118,7 @@ client.connect().then(async () => {
 
 			channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: ${mode} | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
 		} else if (command === "info") {
-			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost]`);
-		} else if (command === "help") {
-			channel.sendMessage(`*Commands* | [https://github.com/Adivise/SpaceHost#-auto-host-mode Commands]`);
+			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost] | [https://github.com/Adivise/SpaceHost#-features--commands Commands]`);
 		}
 	});
 
@@ -172,8 +174,10 @@ client.connect().then(async () => {
 		const strArray = [];
 		for (let i = 0; i < queue.length; i++) {
 			const user = await client.getUserById(queue[i]);
-			strArray.push(`${i + 1}. [https://osu.ppy.sh/users/${user.id} ${user.username}]`);
+			strArray.push(`[https://osu.ppy.sh/users/${user.id} ${user.username}]`);
 		}
+		const firstElement = strArray.shift(); // Remove the first element from strArray and store it
+		strArray.push(firstElement); // Add the first element to the end of strArray
 		channel.sendMessage(`Host Queue: ${strArray.join(", ")}`);
 
 		// update settings
@@ -185,7 +189,7 @@ client.connect().then(async () => {
 	});
 
 	lobby.on("allPlayersReady", async () => {
-		if (queue.length === 1) return;
+		if (queue.length === 1) return; // remove this if your need 1 player can start
 		channel.sendMessage("!mp start");
 	});
 
@@ -193,7 +197,7 @@ client.connect().then(async () => {
 		// event host update
 		if (obj === null) return;
 		if (queue.includes(obj.user.id)) {
-			console.log("Host Updated!");
+			console.log("[DEBUG] Host Updated!");
 			// set host
 			host = obj.user.id;
 			// shift host to last element
@@ -203,6 +207,7 @@ client.connect().then(async () => {
 			// get host to first element
 		 	queue.unshift(queue.splice(queue.indexOf(obj.user.id), 1)[0]);
 		}
+		warning = 0;
 	});
 
 });
@@ -248,16 +253,24 @@ async function getMods() {
 
 async function checkRules(beatmap) {
 	if (beatmap.length == 0) return getRules("Beatmap not found!");
-	if (beatmap[0].mode != Rotator.mode) return getRules("Beatmap mode is not standard!");
-	if (beatmap[0].difficultyrating > Rotator.max_star) return getRules("Beatmap star rating is too high!");
-	if (beatmap[0].difficultyrating < Rotator.min_star) return getRules("Beatmap star rating is too low!");
-	if (beatmap[0].total_length > Rotator.max_length) return getRules("Beatmap length is too long!");
-	if (beatmap[0].total_length < Rotator.min_length) return getRules("Beatmap length is too short!");
+	if (beatmap[0].mode != Rotator.mode) return getRules("Beatmap mode is not *Standard*");
+	if (beatmap[0].difficultyrating > Rotator.max_star) return getRules("Beatmap *Star Rating* is too high");
+	if (beatmap[0].difficultyrating < Rotator.min_star) return getRules("Beatmap *Star Rating* is too low");
+	if (beatmap[0].total_length > Rotator.max_length) return getRules("Beatmap *Length* is too long");
+	if (beatmap[0].total_length < Rotator.min_length) return getRules("Beatmap *Length* is too short");
 }
 
 async function getRules(reason) {
-	lobby.channel.sendMessage(`[https://osu.ppy.sh/users/${lobby.getHost().user.id} ${lobby.getHost().user.username}] | *Warning* ${reason}`);
+	warning++
+
+	lobby.channel.sendMessage(`[https://osu.ppy.sh/users/${lobby.getHost().user.id} ${lobby.getHost().user.username}] | *Warning* ${reason} (${warning}/3)`);
 	lobby.channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: Standard | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
 	
+	if (warning === 3) {
+		// skip the host get redeacted
+		lobby.setHost("#" + queue[1]);
+		warning = 0;
+	}
+
 	getBeatmap();
 }
