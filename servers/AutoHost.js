@@ -22,7 +22,7 @@ client.connect().then(async () => {
 	console.log(`[INFO] Bot ${ipc.username} is online!`);
 	console.log(`[TIP] You can use *CRTL + C* to close the lobby!`);
 	console.log(`[WARN] Don't try exit with click out, the lobby will not close fully`);
-	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close and chat`);
+	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close in chat`);
 
 	const channel = await client.createLobby("Setting up lobby...");
 	lobby = channel.lobby;
@@ -267,7 +267,7 @@ async function getRules(reason) {
 	lobby.channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: Standard | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
 	
 	if (warning === 3) {
-		// skip the host get redeacted
+		if (queue.length == 1) return;
 		lobby.setHost("#" + queue[1]);
 		warning = 0;
 	}

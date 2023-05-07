@@ -27,7 +27,7 @@ client.connect().then(async () => {
 	console.log(`[INFO] Bot ${ipc.username} is online!`);
 	console.log(`[TIP] You can use *CRTL + C* to close the lobby!`);
 	console.log(`[WARN] Don't try exit with click out, the lobby will not close fully`);
-	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close and chat`);
+	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close in chat`);
 
 	const channel = await client.createLobby("Setting up lobby...");
 	lobby = channel.lobby;
