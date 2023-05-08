@@ -12,11 +12,10 @@ const client = new BanchoClient(ipc);
 
 let lobby;
 
-// Memory database console died = no more database
-let queue = [];
-let host = 0;
-let vote = [];
-let warning = 0;
+let queue = []; // player list
+let host = 0; // host id
+let vote = []; // vote list
+let warning = 0; // warning attemp
 
 client.connect().then(async () => {
 	console.log(`[INFO] Bot ${ipc.username} is online!`);
@@ -24,19 +23,18 @@ client.connect().then(async () => {
 	console.log(`[WARN] Don't try exit with click out, the lobby will not close fully`);
 	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close in chat`);
 
-	const channel = await client.createLobby("Setting up lobby...");
+	const channel = await client.createLobby(Rotator.name);
 	lobby = channel.lobby;
 
 	await Promise.all([
 		lobby.setPassword(Rotator.password),
-		lobby.setMods(Rotator.mods, Rotator.freemod),
-		lobby.setName(Rotator.name),
 		lobby.invitePlayer(ipc.username),
 		lobby.setSettings(Rotator.team_mode, Rotator.win_condition, Rotator.size)
 	]);
-	// setfreemods
+
 	console.log("Lobby Created! Name: " + lobby.name + ", password: " + Rotator.password);
 	console.log("Multiplayer link: https://osu.ppy.sh/mp/" + lobby.id);
+	lobby.channel.sendMessage(`!mp mods ${Rotator.mods.join(" ")}`);
 
 	lobby.on("beatmapId", async (beatmapId) => {
 		if (beatmapId == null) return;
@@ -48,7 +46,6 @@ client.connect().then(async () => {
 
 		channel.sendMessage(`*Details* | [https://osu.ppy.sh/beatmapsets/${beatmap[0].beatmapset_id}#/${beatmap[0].beatmap_id} ${beatmap[0].artist} - ${beatmap[0].title}] | AR: ${beatmap[0].diff_approach} | CS: ${beatmap[0].diff_size} | OD: ${beatmap[0].diff_overall} | HP: ${beatmap[0].diff_drain} | Star Rating: ${Number(beatmap[0].difficultyrating).toFixed(2)} ★ | Bpm: ${beatmap[0].bpm} | Length: ${convertSeconds(beatmap[0].total_length)}`);
 		channel.sendMessage(`*Mirror* | [https://beatconnect.io/b/${beatmap[0].beatmapset_id} BeatConnect] | [https://dl.sayobot.cn/beatmaps/download/novideo/${beatmap[0].beatmapset_id} Sayobot] | [https://api.chimu.moe/v1/download/${beatmap[0].beatmapset_id}?n=1 Chimu]`);
-
 	});
 
 	lobby.channel.on("message", async (message) => {
@@ -84,6 +81,14 @@ client.connect().then(async () => {
 				return;
 			}
 
+			// check if host Afk will change the host
+			const user = await client.getUserById(host);
+			if(user.stats == "Afk") {
+				lobby.setHost("#" + queue[1]);
+				lobby.kickPlayer("#" + host);
+				return;
+			}
+
 			if (vote.includes(message.user.id)) return channel.sendMessage("You already voted!");
 			vote.push(message.user.id);
 
@@ -116,33 +121,33 @@ client.connect().then(async () => {
 				mode = "Mania";
 			}
 
-			channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: ${mode} | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
+			channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: ${mode} | Mods: ${Rotator.mods.join(", ")}`);
 		} else if (command === "info") {
 			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost] | [https://github.com/Adivise/SpaceHost#-features--commands Commands]`);
 		}
 	});
 
-	lobby.on("name", async (name) => {
+	lobby.on("name", async (name) => { // will check only when map finish
 		if (name !== Rotator.name) {
 			channel.sendMessage(`!mp name ${Rotator.name}`);
 		}
 	});
 
-	lobby.on("winCondition", async (winCondition) => {
+	lobby.on("winCondition", async (winCondition) => { // will check only when map finish
 		if (winCondition !== 0) {
 			channel.sendMessage(`!mp set ${Rotator.team_mode} ${Rotator.win_condition} ${Rotator.size}`);
 		}
 	});
 
-	lobby.on("teamMode", async (teamMode) => {
+	lobby.on("teamMode", async (teamMode) => { // will check only when map finish
 		if (teamMode !== 0) {
 			channel.sendMessage(`!mp set ${Rotator.team_mode} ${Rotator.win_condition} ${Rotator.size}`);
 		}
 	});
 
-	lobby.on("freemod", async (freemod) => {
+	lobby.on("freemod", async (freemod) => { // will check only on apply global mods when map finish
 		if (freemod === false) {
-			channel.sendMessage(`!mp mods ${Rotator.mods.join(" ")} ${Rotator.freemod ? "Freemod" : ""}`);
+			channel.sendMessage(`!mp mods ${Rotator.mods.join(" ")}`);
 		}
 	});
 
@@ -159,13 +164,17 @@ client.connect().then(async () => {
 		if (vote.includes(obj.user.id)) vote.splice(vote.indexOf(obj.user.id), 1);
 		if (obj.user.id === host) { // host left = next host
 			queue.splice(queue.indexOf(obj.user.id), 1);
-			host = 0;
 			if (queue.length > 0) {
 				lobby.setHost("#" + queue[0]);
 				host = queue[0];
 			}
+			host = 0;
 		} else { // player left = remove from queue
 			queue.splice(queue.indexOf(obj.user.id), 1);
+		}
+		if (queue.length === 0) {
+			console.log("[DEBUG] Update Settings");
+			await updateSettings();
 		}
 	});
 
@@ -218,6 +227,15 @@ process.on("SIGINT", async () => {
 	process.exit();
 });
 
+setInterval(lobbyDummie, 180000); // every 3 minute
+
+function lobbyDummie() { // keep lobby away (will not automatic close)
+	if (queue.length === 0) { // nobody in lobby = pinging
+		console.log("[DEBUG] LobbyDummie Pinging....");
+		getBeatmap();
+	}
+}
+
 async function updateSettings() {
 	// clear vote
 	vote = [];
@@ -244,13 +262,6 @@ async function getBeatmap() {
 	lobby.channel.sendMessage(`!mp map ${random.beatmap_id} ${Rotator.mode}`);
 }
 
-async function getMods() {
-	const mods = ["HR", "DT", "HD", "EZ", "Freemod", "None"];
-	let random = mods[Math.floor(Math.random() * mods.length)];
-	
-	lobby.channel.sendMessage(`!mp mods ${random}`);
-}
-
 async function checkRules(beatmap) {
 	if (beatmap.length == 0) return getRules("Beatmap not found!");
 	if (beatmap[0].mode != Rotator.mode) return getRules("Beatmap mode is not *Standard*");
@@ -263,11 +274,11 @@ async function checkRules(beatmap) {
 async function getRules(reason) {
 	warning++
 
-	lobby.channel.sendMessage(`[https://osu.ppy.sh/users/${lobby.getHost().user.id} ${lobby.getHost().user.username}] | *Warning* ${reason} (${warning}/3)`);
-	lobby.channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: Standard | Mods: ${Rotator.mods.join(", ")} | FreeMod: ${Rotator.freemod ? "Allowed" : "Not Allowed"}`);
-	
+	lobby.channel.sendMessage(`*Warning* | [https://osu.ppy.sh/users/${lobby.getHost().user.id} ${lobby.getHost().user.username}] | Reason: ${reason} | Attempt remaining: (${warning}/3)`);
+	lobby.channel.sendMessage(`*Rules* | Star Rating: ${Rotator.min_star}* - ${Rotator.max_star}* | Length: ${convertSeconds(Rotator.min_length)} - ${convertSeconds(Rotator.max_length)} | Mode: Standard | Mods: ${Rotator.mods.join(", ")}`);
+
 	if (warning === 3) {
-		if (queue.length == 1) return;
+		if (queue.length == 1) return lobby.kickPlayer("#" + host);
 		lobby.setHost("#" + queue[1]);
 		warning = 0;
 	}

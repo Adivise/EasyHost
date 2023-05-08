@@ -12,7 +12,6 @@ const client = new BanchoClient(ipc);
 
 let lobby;
 
-// Memory database console died = no more database
 let queue = []; // player list
 
 let skip = []; // skip list
@@ -26,19 +25,18 @@ client.connect().then(async () => {
 	console.log(`[WARN] Don't try exit with click out, the lobby will not close fully`);
 	console.log(`[WARN] When you do, you need to join back to the lobby and type !mp close in chat`);
 
-	const channel = await client.createLobby("Setting up lobby...");
+	const channel = await client.createLobby(AutoMap.name);
 	lobby = channel.lobby;
 
 	await Promise.all([
 		lobby.setPassword(AutoMap.password), 
-		lobby.setMods(AutoMap.mods, AutoMap.freemod),
-		lobby.setName(AutoMap.name),
 		lobby.invitePlayer(ipc.username),
 		lobby.setSettings(AutoMap.team_mode, AutoMap.win_condition, AutoMap.size)
 	]);
-	// setfreemods
+
 	console.log("Lobby Created! Name: " + lobby.name + ", password: " + AutoMap.password);
 	console.log("Multiplayer link: https://osu.ppy.sh/mp/" + lobby.id);
+	lobby.channel.sendMessage(`!mp mods ${AutoMap.mods.join(" ")}`);
 
 	lobby.on("beatmapId", async (beatmapId) => {
 		if (beatmapId == null) return;
@@ -124,7 +122,7 @@ client.connect().then(async () => {
 				mode = "Mania";
 			}
 
-			channel.sendMessage(`*Rules* | Star Rating: ${AutoMap.min_star}* - ${AutoMap.max_star}* | Mode: ${mode} | Mods: ${AutoMap.mods.join(", ")} | FreeMod: ${AutoMap.freemod ? "Allowed" : "Not Allowed"}`);
+			channel.sendMessage(`*Rules* | Star Rating: ${AutoMap.min_star}* - ${AutoMap.max_star}* | Mode: ${mode} | Mods: ${AutoMap.mods.join(", ")}`);
 		} else if (command === "info") {
 			channel.sendMessage(`*Info* | Powered by [https://github.com/ThePooN/bancho.js Bancho.js] | Developer by [https://osu.ppy.sh/users/21216709 Suntury] | Source Code: [https://github.com/Adivise/SpaceHost SpaceHost] | [https://github.com/Adivise/SpaceHost#-features--commands Commands]`);
 		}
@@ -162,6 +160,15 @@ process.on("SIGINT", async () => {
 	process.exit();
 });
 
+setInterval(lobbyDummie, 180000); // every 3 minute
+
+function lobbyDummie() { // keep lobby away (will not automatic close)
+	if (queue.length === 0) {
+		console.log("[DEBUG] LobbyDummie Pinging....");
+		getBeatmap();
+	}
+}
+
 async function getBeatmap() {
     const since = AutoMap.since[Math.floor(Math.random() * AutoMap.since.length)];
     const response = await fetch(`https://osu.ppy.sh/api/get_beatmaps?k=${ipc.apiKey}&since=${since}`);
@@ -172,13 +179,6 @@ async function getBeatmap() {
     let random = filter[Math.floor(Math.random() * filter.length)];
 	
 	lobby.channel.sendMessage(`!mp map ${random.beatmap_id} ${AutoMap.mode}`);
-}
-
-async function getMods() {
-	const mods = ["HR", "DT", "HD", "EZ", "Freemod", "None"];
-	let random = mods[Math.floor(Math.random() * mods.length)];
-	
-	lobby.channel.sendMessage(`!mp mods ${random}`);
 }
 
 async function clearVotes() {

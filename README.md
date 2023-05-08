@@ -14,7 +14,7 @@
 - this bot is still in development (not fully test), so there will be bugs and errors. If you find any, please report them in the [issues](https://github.com/Adivise/SpaceHost/issues)
 
 ## 📑 Feature
-- [x] 3 in 1 (Rotate, Map, and Team)
+- [x] 3 in 1 (Rotate, Map, Team and Mods)
 - [x] No Database Required
 - [x] Lightweight
 - [x] Full Customizable
@@ -58,12 +58,11 @@ Lobby Configuration in `settings/lobby.json` (Example):
     "Simple": {
         "name": "Simple | 5* - 8.99* | 15:00 | !info", // Name of the room
         "password": "", // Password of the room
-        "mode": 0, // 0 = osu!, 1 = Taiko, 2 = Catch, 3 = Mania
+        "mode": 0, // 0 = Standard, 1 = Taiko, 2 = Catch, 3 = Mania
         "win_condition": 0, // 0 = Score, 1 = Accuracy, 2 = Combo, 3 = ScoreV2
         "team_mode": 0, // 0 = Head to Head, 1 = Tag Coop, 2 = Team Vs, 3 = Tag Team Vs
         "size": 16, // Room Size
-        "freemod": true, // Enable/Disable FreeMod
-        "mods": ["None"], // Mods ["None", "HD", "HR", "DT", "NC", "FL", "SO", "PF", "EZ", "NF", "HT", "SD", "RX", "AP", "TD", "V2", "MR"]
+        "mods": ["None"], // Mods ["None", "Freemod", "HD", "HR", "DT", "NC", "FL", "SO", "PF", "EZ", "NF", "HT", "SD", "RX", "AP", "TD", "V2", "MR"]
         "min_star": 5, // Minimum Star
         "max_star": 8.99, // Maximum Star
         "min_length": 30, // Minimum Length (Second)
@@ -78,35 +77,21 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 </p>
 </details>
 
-<details><summary>🔩 Features & Commands [CLICK ME]</summary>
-<p>
-
 ## 🔩 Features & Commands
 
 > Note: The default prefix is '!'
 
-### 💬 **Auto Host Mode**
+#### 💬 **Auto Host Mode**
 
 - Start (!start or !start [seconds]) - Start Match (Host)
 - Stop (!stop) - Stop Abort Timer (Host)
 - Abort (!abort) - Abort Match (Host)
-- Skip (!skip) - Skip Host (Vote, Host)
+- Skip (!skip) - Skip Host (Vote, Host) AFK Detected
 - Queue (!queue) - Show Host Queue
 - Rule (!rule) - Show Lobby Rule
 - Info (!info) - Show Bot Info
-- Help (!help) - Show Command List 
 
-### 💬 **Auto Map Mode**
-
-- Start (!start) - Start Match (Vote)
-- Stop (!stop) - Stop Abort Timer (Vote)
-- Abort (!abort) - Abort Match (Vote)
-- Skip (!skip) - Skip Beatmap (Vote)
-- Rule (!rule) - Show Lobby Rule
-- Info (!info) - Show Bot Info
-- Help (!help) - Show Command List
-
-### 💬 **Auto Team Mode** 
+#### 💬 **Auto Map/Mods Mode**
 
 - Start (!start) - Start Match (Vote)
 - Stop (!stop) - Stop Abort Timer (Vote)
@@ -114,7 +99,15 @@ After installation or finishes all you can use `npm run rotate, map, versus` to 
 - Skip (!skip) - Skip Beatmap (Vote)
 - Rule (!rule) - Show Lobby Rule
 - Info (!info) - Show Bot Info
-- Help (!help) - Show Command List
+
+#### 💬 **Auto Team Mode** 
+
+- Start (!start) - Start Match (Vote)
+- Stop (!stop) - Stop Abort Timer (Vote)
+- Abort (!abort) - Abort Match (Vote)
+- Skip (!skip) - Skip Beatmap (Vote)
+- Rule (!rule) - Show Lobby Rule
+- Info (!info) - Show Bot Info
 
 </p>
 </details>
