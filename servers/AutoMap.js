@@ -13,7 +13,7 @@ const client = new BanchoClient(ipc);
 let lobby;
 
 let queue = []; // player list
-
+let lobbyId = 0
 let skip = []; // skip list
 let start = []; // start list
 let abort = []; // abort list
@@ -27,6 +27,8 @@ client.connect().then(async () => {
 
 	const channel = await client.createLobby(AutoMap.name);
 	lobby = channel.lobby;
+
+	lobbyId = lobby.id;
 
 	await Promise.all([
 		lobby.setPassword(AutoMap.password), 
@@ -160,12 +162,26 @@ process.on("SIGINT", async () => {
 	process.exit();
 });
 
-setInterval(lobbyDummie, 180000); // every 3 minute
+setInterval(async () => {
+	await lobbyDummie();
+}, 180000);
 
-function lobbyDummie() { // keep lobby away (will not automatic close)
-	if (queue.length === 0) {
-		console.log("[DEBUG] LobbyDummie Pinging....");
-		getBeatmap();
+async function lobbyDummie() { // keep lobby away (will auto create room)
+	if (queue.length === 0) { // nobody in lobby = pinging
+		const client = new BanchoClient(ipc);
+		client.connect().then(async () => {
+			const channel = client.getChannel("#mp_" + lobbyId);
+			try { // when can join room
+				await channel.join();
+				console.log("[DUMMIE] The Room is alive.");
+				await getBeatmap();
+				client.disconnect();
+			} catch (err) { // when cannot join room
+				console.log("[DUMMIE] The Room is dead.");
+				client.disconnect();
+				process.exit(); // work with use start.bat
+			}
+		})
 	}
 }
 

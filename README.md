@@ -44,7 +44,7 @@ Copy or Rename in `setttings/config.json.example` to `config.json` and fill out 
 ```.json
 {
     "ipc": {
-        "username": "YOUR_OSU_NAME",
+        "username": "YOUR_IRC_NAME",
         "password": "YOUR_IRC_PASSWORD",
         "apiKey": "YOUR_APIKEY"
     }
@@ -55,8 +55,8 @@ Lobby Configuration in `settings/lobby.json` (Example):
 
 ```.json
 {
-    "Simple": {
-        "name": "Simple | 5* - 8.99* | 15:00 | !info", // Name of the room
+    "Rotator": {
+        "name": "Auto Host | 5* - 8.99* | 15:00 | !info", // Name of the room
         "password": "", // Password of the room
         "mode": 0, // 0 = Standard, 1 = Taiko, 2 = Catch, 3 = Mania
         "win_condition": 0, // 0 = Score, 1 = Accuracy, 2 = Combo, 3 = ScoreV2
@@ -72,7 +72,7 @@ Lobby Configuration in `settings/lobby.json` (Example):
 }
 ```
 
-After installation or finishes all you can use `npm run rotate, map, versus` to start the bot. (`Can run multiple bots at the same time`)
+After installation or finishes all please use `Start.bat` to start the bot and for auto create room working! (`Can run multiple bots at the same time`)
 
 </p>
 </details>

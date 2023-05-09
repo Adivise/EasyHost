@@ -1,13 +1,9 @@
 {
   "name": "spacehost",
-  "version": "1.0.1",
-  "description": "osu bot auto rotate, auto map, auto team",
+  "version": "1.3.0",
+  "description": "osu bot auto rotate, auto map, auto team, auto pick mods",
   "main": "./servers/AutoHost.js",
-  "scripts": {
-    "rotate": "node ./servers/AutoHost.js",
-    "map": "node ./servers/AutoMap.js",
-    "versus": "node ./servers/AutoVersus.js"
-  },
+  "scripts": {},
   "dependencies": {
     "bancho.js": "^0.11.0",
     "dotenv": "^16.0.3",

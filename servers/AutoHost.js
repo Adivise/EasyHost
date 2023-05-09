@@ -16,6 +16,7 @@ let queue = []; // player list
 let host = 0; // host id
 let vote = []; // vote list
 let warning = 0; // warning attemp
+let lobbyId = 0
 
 client.connect().then(async () => {
 	console.log(`[INFO] Bot ${ipc.username} is online!`);
@@ -25,6 +26,8 @@ client.connect().then(async () => {
 
 	const channel = await client.createLobby(Rotator.name);
 	lobby = channel.lobby;
+
+	lobbyId = lobby.id;
 
 	await Promise.all([
 		lobby.setPassword(Rotator.password),
@@ -227,12 +230,26 @@ process.on("SIGINT", async () => {
 	process.exit();
 });
 
-setInterval(lobbyDummie, 180000); // every 3 minute
+setInterval(async () => {
+	await lobbyDummie();
+}, 180000);
 
-function lobbyDummie() { // keep lobby away (will not automatic close)
+async function lobbyDummie() { // keep lobby away (will auto create room)
 	if (queue.length === 0) { // nobody in lobby = pinging
-		console.log("[DEBUG] LobbyDummie Pinging....");
-		getBeatmap();
+		const client = new BanchoClient(ipc);
+		client.connect().then(async () => {
+			const channel = client.getChannel("#mp_" + lobbyId);
+			try { // when can join room
+				await channel.join();
+				console.log("[DUMMIE] The Room is alive.");
+				await getBeatmap();
+				client.disconnect();
+			} catch (err) { // when cannot join room
+				console.log("[DUMMIE] The Room is dead.");
+				client.disconnect();
+				process.exit(); // work with use start.bat
+			}
+		})
 	}
 }
 
