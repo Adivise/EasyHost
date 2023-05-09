@@ -72,7 +72,7 @@ Lobby Configuration in `settings/lobby.json` (Example):
 }
 ```
 
-After installation or finishes all please use `Start.bat` to start the bot and for auto create room working! (`Can run multiple bots at the same time`)
+After installation or finishes all please use `Start.bat` to start the bot for auto create room working! (`Can run multiple bots at the same time`)
 
 </p>
 </details>
