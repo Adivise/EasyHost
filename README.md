@@ -1,5 +1,5 @@
 <p align="center">
-<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=SpaceHost&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient"/> </a> 
+<img src="https://capsule-render.vercel.app/api?type=waving&color=gradient&height=200&section=header&text=EasyHost&fontSize=80&fontAlignY=35&animation=twinkling&fontColor=gradient"/> </a> 
 </p>
 
 <p align="center"> 
@@ -29,8 +29,8 @@
 ## 📚 Installation
 
 ```
-git clone https://github.com/Adivise/SpaceHost
-cd SpaceHost
+git clone https://github.com/Adivise/EasyHost
+cd EasyHost
 npm install
 ```
 
